@@ -4,7 +4,7 @@ import requests
 app = Flask(__name__)
 
 def notify_azure_function(city, temperature):
-    azure_function_url = 'https://your-azure-function-url/api/your-function-name'  # Replace with your Azure Function URL
+    azure_function_url = 'https://az204funcappshared.azurewebsites.net/api/weatherTracker_trigger'  # Replace with your Azure Function URL
     payload = {'city': city, 'temperature': temperature}
     response = requests.post(azure_function_url, json=payload)
     
@@ -25,7 +25,7 @@ def weather():
     temperature = weather_data.get('main', {}).get('temp', 0)
 
     # Trigger the Azure Function when the temperature is greater than 50°F
-    if float(temperature) > 50.0:
+    if float(temperature) < 50.0:
         notify_azure_function(city, temperature)
 
     return render_template('weather.html', city=city, weather_data=weather_data)
